@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>id.droidlink.sample</groupId>
+  <artifactId>droidlink-sample</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>apk</packaging>
+  <name>DroidLink Sample</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>id</groupId>
+      <artifactId>id.droidlink</artifactId>
+      <version>2.5.3-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>4.1.1.4</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sqldroid</groupId>
+      <artifactId>sqldroid</artifactId>
+      <version>1.0.3</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <pluginManagement>
+      <plugins>
+	<!--This plugin's configuration is used to store Eclipse m2e settings 
+	    only. It has no influence on the Maven build itself. -->
+	<plugin>
+	  <groupId>org.eclipse.m2e</groupId>
+	  <artifactId>lifecycle-mapping</artifactId>
+	  <version>1.0.0</version>
+	  <configuration>
+	    <lifecycleMappingMetadata>
+	      <pluginExecutions>
+		<pluginExecution>
+		  <pluginExecutionFilter>
+		    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+		    <artifactId>android-maven-plugin</artifactId>
+		    <versionRange>[3.8.2,)</versionRange>
+		    <goals>
+		      <goal>consume-aar</goal>
+		    </goals>
+		  </pluginExecutionFilter>
+		  <action>
+		    <ignore></ignore>
+		  </action>
+		</pluginExecution>
+	      </pluginExecutions>
+	    </lifecycleMappingMetadata>
+	  </configuration>
+	</plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+	<plugin>
+          <groupId>com.simpligility.maven.plugins</groupId>
+	  <artifactId>android-maven-plugin</artifactId>
+	  <version>4.5.0</version>
+	  <extensions>true</extensions>
+	  <configuration>
+	    <sdk>
+	      <platform>21</platform>
+	    </sdk>
+            <dexCoreLibrary>true</dexCoreLibrary>
+            <androidManifestFile>AndroidManifest.xml</androidManifestFile>
+            <resourceDirectory>res</resourceDirectory>
+            <assetsDirectory>assets</assetsDirectory>
+	  </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>java</executable>
+          <arguments>
+          <argument>-classpath</argument>
+          <classpath/>
+          <argument>id.droidlink.EntitiesHarvester</argument>
+            <!-- * PERSISTENCE UNIT NAME * -->
+            <argument>cards</argument>
+            <argument>assets/entities</argument>
+          </arguments>
+          <addResourcesToClasspath>true</addResourcesToClasspath>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

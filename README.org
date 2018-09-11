@@ -1,0 +1,17 @@
+
+*droidlink-sample* - project which demonstrates usage of *droidlink* library.
+
+lambdaprime <id.blackmesa@gmail.com>
+
+* Prereq
+
+1. Maven Plugin for Android
+2. Installed *droidlink* (see https://github.com/lambdaprime/droidlink)
+
+* Install
+
+#+BEGIN_EXAMPLE
+git clone https://github.com/lambdaprime/droidlink-sample.git
+mvn install
+mvn android:deploy
+#+END_EXAMPLE
