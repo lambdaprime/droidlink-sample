@@ -5,13 +5,22 @@ lambdaprime <id.blackmesa@gmail.com>
 
 * Prereq
 
-1. Maven Plugin for Android
-2. Installed *droidlink* (see https://github.com/lambdaprime/droidlink)
+1. Installed *droidlink* (see https://github.com/lambdaprime/droidlink)
 
-* Install
+* Build/Install
+
+** Maven
+
+Make sure you have installed "Maven Plugin for Android"
 
 #+BEGIN_EXAMPLE
 git clone https://github.com/lambdaprime/droidlink-sample.git
 mvn install
 mvn android:deploy
+#+END_EXAMPLE
+
+** Gradle
+
+#+BEGIN_EXAMPLE
+gradle installDebug
 #+END_EXAMPLE

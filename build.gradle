@@ -1,0 +1,70 @@
+/**
+ * gradle installDebug
+ */
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenLocal()
+    }
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.0'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile group: 'id', name: 'id.droidlink', version: '2.5.3-SNAPSHOT'
+    compile group: 'org.sqldroid', name: 'sqldroid', version: '1.0.3'
+}
+
+android {
+    compileSdkVersion 21
+
+    defaultConfig {
+        targetSdkVersion 26
+        multiDexEnabled true
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+    }
+
+    dexOptions {
+        incremental 
+        preDexLibraries
+        jumboMode 
+    }
+
+}
+
+task runEntitiesHarvester(type: Exec) {
+    standardInput = System.in
+    // Creating classpath with all dependencies
+    def cp = configurations.compile.collectNested { file -> file.toString() }.join(":")
+    // with resource folder for persistence.xml
+    cp += ":" + android.sourceSets.main.resources.srcDirs.join(":")
+    // and project compiled classes
+    cp += ":" + "${project.buildDir}/intermediates/classes/release"
+    commandLine "java", "-classpath", cp, "id.droidlink.EntitiesHarvester", "entities", "assets/entities"
+}
+
+assemble.dependsOn runEntitiesHarvester
