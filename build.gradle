@@ -56,15 +56,35 @@ android {
 
 }
 
-task runEntitiesHarvester(type: Exec) {
-    standardInput = System.in
+List<String> createCommandLine(String variant) {
     // Creating classpath with all dependencies
-    def cp = configurations.compile.collectNested { file -> file.toString() }.join(":")
+    String cp = configurations.compile.collectNested { file -> file.toString() }.join(":")
     // with resource folder for persistence.xml
     cp += ":" + android.sourceSets.main.resources.srcDirs.join(":")
     // and project compiled classes
-    cp += ":" + "${project.buildDir}/intermediates/classes/release"
-    commandLine "java", "-classpath", cp, "id.droidlink.EntitiesHarvester", "entities", "assets/entities"
+    cp += ":" + "${project.buildDir}/intermediates/classes/" + variant
+    return ["java", "-classpath", cp, "id.droidlink.EntitiesHarvester", "cards", "assets/entities"]
 }
 
-assemble.dependsOn runEntitiesHarvester
+task runEntitiesHarvesterDebug(type: Exec) {
+    standardInput = System.in
+    commandLine createCommandLine("debug")
+}
+
+task runEntitiesHarvesterRelease(type: Exec) {
+    standardInput = System.in
+    commandLine createCommandLine("release")
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'compileReleaseSources') {
+        task.doLast {
+            runEntitiesHarvesterRelease.exec()
+        }
+    }
+    if (task.name == 'compileDebugSources') {
+        task.doLast {
+            runEntitiesHarvesterDebug.exec()
+        }
+    }
+}
